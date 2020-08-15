@@ -5,9 +5,27 @@ git clone https://github.com/elfmz/far2l
 cd far2l
 mkdir build
 cd build
+```
+Если это безгуёвая ОС, то сначала надо добавить:
+```
+sudo apt install libwxgtk3.0
+```
+Тогда должно скомпилиться.
+```
 cmake -DUSEWX=yes -DCMAKE_BUILD_TYPE=Release ..
 make -j4
 cd install
+```
+Копируем содержимое например в `~/far2l` и добавляем в PATH:
+```
+sudo export PATH="$HOME/far2l:$PATH"
+```
+И добавим линк, чтобы вызывать можно было по `far` из терминала:
+```
+ln -s far2l far
+```
+А так можно сделать линк на него для КДЕ:
+```
 wget https://upload.wikimedia.org/wikipedia/commons/d/d3/Far_icon.png
 wdir=$(pwd)
 echo "[Desktop Entry]" > far2l.desktop

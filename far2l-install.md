@@ -10,21 +10,44 @@ cd build
 ```
 sudo apt install libwxgtk3.0
 ```
-Тогда должно скомпилиться.
+Если в терминале у разных штук появляются ошибки типа:
+```
+`mkdir': Permission denied @ dir_s_mkdir - /run/user/1000 (Errno::EACCES)'
+```
+то это из-за переменной `XDG_RUNTIME_DIR`, можно просто её unset в этом сеансе:
+```
+unset XDG_RUNTIME_DIR
+```
+
+Компилим, добавляем вкл\выкл панелей по Esc, и делаем линк в кедах:
 ```
 cmake -DUSEWX=yes -DCMAKE_BUILD_TYPE=Release ..
 make -j4
 cd install
 ```
+вкл\выкл панелей по Esc:
+```
+mkdir -p ~/.config/far2l/REG/HKU/c/k-Software/k-Far2/k-KeyMacros/k-Shell/k-Esc
+cd ~/.config/far2l/REG/HKU/c/k-Software/k-Far2/k-KeyMacros/k-Shell/k-Esc
+echo "DisableOutput" > v-DisableOutput
+echo "DWORD" >> v-DisableOutput
+echo "1" >> v-DisableOutput
+echo "EmptyCommandLine" > v-EmptyCommandLine
+echo "DWORD" >> v-EmptyCommandLine
+echo "1" >> v-EmptyCommandLine
+echo "Sequence" > v-Sequence
+echo "SZ" >> v-Sequence
+echo "CtrlO\0" >> v-Sequence
+```
 Копируем содержимое например в `~/far2l` и добавляем в PATH:
 ```
 sudo export PATH="$HOME/far2l:$PATH"
 ```
-И добавим линк, чтобы вызывать можно было по `far` из терминала:
+Добавим линк, чтобы вызывать можно было по `far` из терминала:
 ```
 ln -s far2l far
 ```
-А так можно сделать линк на него для КДЕ:
+Линк на него для КДЕ:
 ```
 wget https://upload.wikimedia.org/wikipedia/commons/d/d3/Far_icon.png
 wdir=$(pwd)
@@ -37,16 +60,5 @@ echo "Terminal=false" >> far2l.desktop
 echo "Type=Application" >> far2l.desktop
 echo "Categories=Utility;FileManager;System;FileTools;" >> far2l.desktop
 echo "Keywords=file manager;" >> far2l.desktop
-mkdir -p ~/.config/far2l/REG/HKU/c/k-Software/k-Far2/k-KeyMacros/k-Shell/k-Esc
-cd ~/.config/far2l/REG/HKU/c/k-Software/k-Far2/k-KeyMacros/k-Shell/k-Esc
-echo "DisableOutput" > v-DisableOutput
-echo "DWORD" >> v-DisableOutput
-echo "1" >> v-DisableOutput
-echo "EmptyCommandLine" > v-EmptyCommandLine
-echo "DWORD" >> v-EmptyCommandLine
-echo "1" >> v-EmptyCommandLine
-echo "Sequence" > v-Sequence
-echo "SZ" >> v-Sequence
-echo "CtrlO\0" >> v-Sequence
 sudo cp -fl -- ${wdir}/far2l.desktop /usr/share/applications/
 ```
